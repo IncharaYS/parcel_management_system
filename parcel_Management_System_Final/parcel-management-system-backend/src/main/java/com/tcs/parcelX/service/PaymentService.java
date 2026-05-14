@@ -39,7 +39,6 @@ public class PaymentService {
         } catch (IllegalArgumentException ex) {
             throw new BadRequestException("Invalid payment method");
         }
-
         DemoCard demoCard = null;
         switch (method) {
             case CREDIT_CARD:
@@ -72,16 +71,16 @@ public class PaymentService {
 
     private DemoCard validateCardDetails(PaymentDetailRequest request, Double amount) {
         if (request.getCardNumber() == null || !ValidationUtil.isValidCardNumber(request.getCardNumber())) {
-            throw new BadRequestException("Invalid card number");
+            throw new BadRequestException("Payment details are invalid");
         }
         if (request.getCvv() == null || !ValidationUtil.isValidCVV(request.getCvv())) {
-            throw new BadRequestException("Invalid CVV");
+            throw new BadRequestException("Payment details are invalid");
         }
         if (request.getExpiryDate() == null || !ValidationUtil.isValidExpiryDate(request.getExpiryDate())) {
-            throw new BadRequestException("Invalid expiry date");
+            throw new BadRequestException("Payment details are invalid");
         }
         if (request.getCardholderName() == null || request.getCardholderName().trim().isEmpty()) {
-            throw new BadRequestException("Invalid cardholder name");
+            throw new BadRequestException("Payment details are invalid");
         }
 
         DemoCard demoCard = demoCardRepository.findByCardNumber(request.getCardNumber())
@@ -102,7 +101,7 @@ public class PaymentService {
 
     private void validateUPI(PaymentDetailRequest request) {
         if (request.getUpiId() == null || !ValidationUtil.isValidUPI(request.getUpiId())) {
-            throw new BadRequestException("Invalid UPI ID");
+            throw new BadRequestException("Payment details are invalid");
         }
     }
 

@@ -271,9 +271,9 @@ export class UserProfileComponent implements OnInit {
   this.errors = {};
 
   const email = String(this.profile.email || '').trim();
-  const emailPattern = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+  const emailPattern = /^(?!.*\.\.)(?![0-9]+@)[A-Za-z0-9](?:[A-Za-z0-9._%+-]{0,62}[A-Za-z0-9])?@(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?\.)+[A-Za-z]{2,63}$/;
   if (!email)                      this.errors.email = 'Email is required';
-  else if (!emailPattern.test(email)) this.errors.email = 'Please enter a valid email address';
+  else if (!emailPattern.test(email)) this.errors.email = 'Enter a valid email such as name@example.com';
 
   const phone = String(this.profile.phone || '').trim();
   if (!phone)                         this.errors.phone = 'Phone number is required';
@@ -284,16 +284,14 @@ export class UserProfileComponent implements OnInit {
   else if (address.length < 10) this.errors.address = 'Address must contain at least 10 characters';
 
   // CITY — FIX: < 3, not <= 3
-  const city = String(this.profile.city || '').trim().replace(/\s+/g, ' ');
+  const city = String(this.profile.city || '');
   if (!city)                        this.errors.city = 'City is required';
-  else if (city.length < 3)         this.errors.city = 'City must contain at least 3 characters';
-  else if (!/^[A-Za-z ]+$/.test(city)) this.errors.city = 'City can contain only letters and spaces';
+  else if (!/^(?=.{3,50}$)[A-Za-z]+(?: [A-Za-z]+)*$/.test(city)) this.errors.city = 'City must be 3-50 letters with single spaces only';
 
   // STATE — FIX: < 3
-  const state = String(this.profile.state || '').trim().replace(/\s+/g, ' ');
+  const state = String(this.profile.state || '');
   if (!state)                         this.errors.state = 'State is required';
-  else if (state.length < 3)          this.errors.state = 'State must contain at least 3 characters';
-  else if (!/^[A-Za-z ]+$/.test(state)) this.errors.state = 'State can contain only letters and spaces';
+  else if (!/^(?=.{3,50}$)[A-Za-z]+(?: [A-Za-z]+)*$/.test(state)) this.errors.state = 'State must be 3-50 letters with single spaces only';
 
   const zipCode = String(this.profile.zipCode || '').trim();
   if (!zipCode)                           this.errors.zipCode = 'PIN code is required';
